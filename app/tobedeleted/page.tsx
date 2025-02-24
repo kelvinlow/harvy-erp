@@ -1,17 +1,17 @@
-import { GalleryVerticalEnd } from 'lucide-react';
-import { LoginForm } from '@/components/login-form';
+import { GalleryVerticalEnd } from 'lucide-react'
+import { LoginForm } from "@/components/login-form"
 
 export const metadata = {
   title: 'Havys ERP Login',
   description: 'Havys ERP Prototype Login Page'
-};
+}
 
 export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="relative hidden bg-muted lg:block">
         <img
-          src="MillOffice_18022019.jpg"
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/MillOffice_18022019.jpg-1OQOdkD5q0MWT1tyGuHm43YtfiPqGo.jpeg"
           alt="Havys Oil Mill Sdn Bhd Factory"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
@@ -32,5 +32,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
+
