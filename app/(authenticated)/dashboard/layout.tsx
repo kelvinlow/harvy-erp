@@ -1,6 +1,5 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -14,35 +13,35 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Toaster } from "@/components/ui/toaster"
 import {
+  SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation"
 
-export default function AppLayout({
+// This layout doesn't wrap content in html/body tags
+export default function AuthenticatedLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
-  
-  // Check if we're on the login page
-  const isLoginPage = pathname === "/"
+  const router = useRouter()
 
-  // If we're on the login page, just render the children without the app shell
-  if (isLoginPage) {
-    return children
+  const handleLogout = () => {
+    document.cookie = "auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT"
+    window.location.href = "/"
   }
 
-  // Otherwise render the full app layout with sidebar and header
   return (
     <div className="flex min-h-screen">
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="flex flex-1 flex-col">
-          <header className="flex h-[60px] items-center gap-4 border-b px-6">
-            <SidebarTrigger />
-            <div className="flex flex-1 items-center justify-between">
+      <div className="flex flex-1 flex-col">
+        <header className="flex h-[60px] items-center gap-4 border-b px-6">
+          <SidebarTrigger />
+          <div className="flex flex-1 items-center justify-between">
+            <div className="flex items-center gap-4">
               <h1 className="text-lg font-semibold">Havys ERP</h1>
+            </div>
+            <div className="flex items-center gap-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -67,25 +66,22 @@ export default function AppLayout({
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     className="text-red-500"
-                    onClick={() => {
-                      document.cookie = "auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT"
-                      window.location.href = "/"
-                    }}
+                    onClick={handleLogout}
                   >
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-          </header>
-          <main className="flex-1 overflow-y-auto">
-            <div className="container mx-auto p-6">
-              {children}
-            </div>
-          </main>
-        </div>
-        <Toaster />
-      </SidebarProvider>
+          </div>
+        </header>
+        <main className="flex-1 overflow-y-auto">
+          <div className="container mx-auto p-6">
+            {children}
+          </div>
+        </main>
+      </div>
+      <Toaster />
     </div>
   )
 }
