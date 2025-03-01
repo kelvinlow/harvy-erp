@@ -1,6 +1,6 @@
 "use client"
 
-import { Building2, Factory } from 'lucide-react'
+import { Building2, Cog, Leaf } from 'lucide-react';
 import { cn } from "@/lib/utils"
 
 interface CompanySelectorProps {
@@ -11,30 +11,31 @@ interface CompanySelectorProps {
 export function CompanySelector({ value, onChange }: CompanySelectorProps) {
   const companies = [
     {
-      id: "thian",
-      name: "Thian Company",
-      description: "Request items for Thian Company operations",
+      id: 'HAVYS',
+      name: 'HAVYS OIL MILL',
+      description: 'Request items for HAVYS OIL MILL SDN BHD operations',
       icon: Building2
     },
     {
-      id: "he",
-      name: "HE Company",
-      description: "Request items for HE Company operations",
-      icon: Factory
+      id: 'GREENPLANT',
+      name: 'GREEN PLANT',
+      description:
+        'Request items for GREEN PLANT ORGANIC FERTILIZER SDN BHD operations',
+      icon: Leaf
     },
     {
-      id: "shin",
-      name: "Shin Company",
-      description: "Request items for Shin Company operations",
+      id: 'shin',
+      name: 'Shin Company',
+      description: 'Request items for Shin Company operations',
       icon: Building2
     },
     {
-      id: "sheng",
-      name: "Sheng Company",
-      description: "Request items for Sheng Company operations",
-      icon: Factory
+      id: 'PARAMOUNT',
+      name: 'PARAMOUNT',
+      description: 'Request items for PARAMOUNT ENTERPRISE SDN BHD operations',
+      icon: Cog
     }
-  ]
+  ];
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

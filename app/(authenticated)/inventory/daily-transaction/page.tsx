@@ -12,7 +12,7 @@ export default function DailyTransactionPage() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="space-y-6">
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-indigo-50 to-emerald-50 p-8">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Daily Transaction</h1>
           <Button onClick={() => setDialogOpen(true)}>
@@ -20,12 +20,12 @@ export default function DailyTransactionPage() {
           </Button>
         </div>
 
-        <TransactionReportDialog 
-          open={dialogOpen} 
-          onOpenChange={setDialogOpen} 
+        <TransactionReportDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
         />
       </div>
     </QueryClientProvider>
-  )
+  );
 }
 
