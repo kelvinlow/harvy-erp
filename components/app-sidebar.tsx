@@ -41,6 +41,10 @@ const navigation = [
     icon: Package,
     items: [
       {
+        title: 'Stock Issue',
+        href: '/inventory/stock-issue'
+      },
+      {
         title: 'Daily Transaction',
         href: '/inventory/daily-transaction'
       },
@@ -49,12 +53,12 @@ const navigation = [
         href: '/inventory/stock-adjustment'
       },
       {
-        title: 'Stock Issue',
-        href: '/inventory/stock-issue'
-      },
-      {
         title: 'Stock Ledger',
         href: '/inventory/stock-ledger'
+      },
+      {
+        title: 'Internal Transfer',
+        href: '/inventory/internal-transfer'
       }
     ]
   },
@@ -70,6 +74,10 @@ const navigation = [
       {
         title: 'Purchase Requisition',
         href: '/purchase-requisition'
+      },
+      {
+        title: 'Internal Purchase Requisition',
+        href: '/internal-purchase-requisition' 
       }
     ]
   },

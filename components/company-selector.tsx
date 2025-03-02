@@ -24,15 +24,15 @@ export function CompanySelector({ value, onChange }: CompanySelectorProps) {
       icon: Leaf
     },
     {
-      id: 'shin',
-      name: 'Shin Company',
-      description: 'Request items for Shin Company operations',
-      icon: Building2
-    },
-    {
       id: 'PARAMOUNT',
       name: 'PARAMOUNT',
       description: 'Request items for PARAMOUNT ENTERPRISE SDN BHD operations',
+      icon: Cog
+    },
+    {
+      id: 'PLACEHOLDER',
+      name: 'PLACEHOLDER',
+      description: 'Request items for PLACEHOLDER operations',
       icon: Cog
     }
   ];

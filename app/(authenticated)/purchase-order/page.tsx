@@ -1,6 +1,6 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { PurchaseOrderList } from '@/components/purchase-order-list';
+import { PurchaseOrderList } from '@/components/purchasing/purchase-order/purchase-order-list';
 
 export default function PurchaseOrderPage() {
   return (
