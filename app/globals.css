@@ -81,7 +81,17 @@ body {
 /* Fallback for browsers that don't support backdrop-filter */
 @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
   .bg-background\/80 {
-    background-color: hsl(var(--background) / 0.97);
+    background-color: hsl(var(--background) / 0.5);
   }
 }
+
+/* Add support for backdrop blur in Firefox */
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+  .bg-background\/80 {
+    background-color: hsl(var(--background) / 0.5);
+  }
+}
+
+
+
 

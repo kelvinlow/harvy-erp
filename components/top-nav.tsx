@@ -21,24 +21,24 @@ export function TopNav() {
   };
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b bg-background/80 backdrop-blur-xl backdrop-saturate-150">
+    <header className="fixed left-0 right-0 top-0 z-50 border-b bg-background/80 backdrop-blur-md backdrop-saturate-150">
       <div className="flex h-16 items-center gap-4 px-4">
         <SidebarTrigger />
         <div className="flex flex-1 items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="relative w-96">
+            <div className="relative w-full max-w-[400px]">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Search or type a command"
-                className="pl-8"
+                className="pl-8 w-full md:w-[350px] lg:w-[400px]"
               />
-              <kbd className="pointer-events-none absolute right-2.5 top-2.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <kbd className="pointer-events-none absolute right-2.5 top-2.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 md:flex">
                 <span className="text-xs">⌘</span>K
               </kbd>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-4 w-4" />
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-600" />

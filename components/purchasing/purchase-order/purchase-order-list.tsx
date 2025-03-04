@@ -53,7 +53,198 @@ const purchaseOrders: PurchaseOrder[] = [
     ],
     total: 3000
   },
+    {
+    id: 'PO003',
+    poNumber: 'PO-2024-003',
+    date: '2024-01-17',
+    prNumber: 'PR-2024-003',
+    supplierName: 'Global Parts Inc',
+    status: 'Delivered',
+    items: [
+      {
+        id: '1',
+        stockCode: 'SP001',
+        description: 'Spare Parts Kit',
+        quantity: 5,
+        uom: 'KIT',
+        unitPrice: 800,
+        amount: 4000
+      }
+    ],
+    total: 4000
+  },
   {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
+    id: 'PO002',
+    poNumber: 'PO-2024-002',
+    date: '2024-01-16',
+    prNumber: 'PR-2024-002',
+    supplierName: 'XYZ Industrial Solutions',
+    status: 'Approved',
+    items: [
+      {
+        id: '1',
+        stockCode: 'MT001',
+        description: 'Industrial Motor',
+        quantity: 1,
+        uom: 'UNIT',
+        unitPrice: 5000,
+        amount: 5000
+      }
+    ],
+    total: 5000
+  },  {
     id: 'PO002',
     poNumber: 'PO-2024-002',
     date: '2024-01-16',

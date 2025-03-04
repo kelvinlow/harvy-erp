@@ -77,7 +77,7 @@ const navigation = [
       },
       {
         title: 'Internal Purchase Requisition',
-        href: '/internal-purchase-requisition' 
+        href: '/internal-purchase-requisition'
       }
     ]
   },
@@ -92,7 +92,9 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar>
+    <Sidebar className="h-[calc(100vh-4rem)] bg-gradient-to-br from-sky-50 via-indigo-50">
+      {' '}
+      {/* Adjust height to account for top nav */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
