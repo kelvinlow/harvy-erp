@@ -1,170 +1,172 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { format } from "date-fns"
-import { CalendarIcon, Loader2, Search, Trash2 } from 'lucide-react'
-import { useForm } from "react-hook-form"
+import * as React from 'react';
+import { format } from 'date-fns';
+import { CalendarIcon, Loader2, Search } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  CardTitle
+} from '@/components/ui/card';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+  CommandList
+} from '@/components/ui/command';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+  PopoverTrigger
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  SelectValue
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { useToast } from "@/components/ui/use-toast"
+  TableRow
+} from '@/components/ui/table';
+import { useToast } from '@/components/ui/use-toast';
 
 interface StockItem {
-  stockCode: string
-  description: string
-  quantityOnHand: number
-  totalCost: number
-  date: string
+  stockCode: string;
+  description: string;
+  quantityOnHand: number;
+  totalCost: number;
+  date: string;
 }
 
 // Mock data
 const stockItems: StockItem[] = [
   {
-    stockCode: "BN0013",
-    description: "1\"X 5\" M/S BOLT & NUT",
+    stockCode: 'BN0013',
+    description: '1"X 5" M/S BOLT & NUT',
     quantityOnHand: 44,
     totalCost: 253.44,
-    date: "2024-01-01"
+    date: '2024-01-01'
   },
   {
-    stockCode: "BN0014",
-    description: "1\"X 7\" M/S BOLT & NUT",
+    stockCode: 'BN0014',
+    description: '1"X 7" M/S BOLT & NUT',
     quantityOnHand: 17,
     totalCost: 111.18,
-    date: "2024-01-01"
+    date: '2024-01-01'
   },
   {
-    stockCode: "BN0017",
-    description: "5/8\"X 4-1/2\" M/S BOLT & NUT",
+    stockCode: 'BN0017',
+    description: '5/8"X 4-1/2" M/S BOLT & NUT',
     quantityOnHand: 25.8,
     totalCost: 127.74,
-    date: "2024-01-01"
+    date: '2024-01-01'
   }
-]
+];
 
 interface StockAdjustmentFormValues {
-  transactionType: string
-  date: Date
-  stockCode: string
-  quantity: number
-  description: string
-  unitCost: number
+  transactionType: string;
+  date: Date;
+  stockCode: string;
+  quantity: number;
+  description: string;
+  unitCost: number;
 }
 
 export function StockAdjustmentForm() {
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const [selectedItems, setSelectedItems] = React.useState<string[]>([])
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
 
   const form = useForm<StockAdjustmentFormValues>({
     defaultValues: {
-      transactionType: "STOCK ADJUSTMENT",
+      transactionType: 'STOCK ADJUSTMENT',
       date: new Date(),
-      stockCode: "",
+      stockCode: '',
       quantity: 0,
-      description: "",
+      description: '',
       unitCost: 0
     }
-  })
+  });
+
+  const quantity = form.watch('quantity');
+  const unitCost = form.watch('unitCost');
 
   const total = React.useMemo(() => {
-    const quantity = form.watch("quantity")
-    const unitCost = form.watch("unitCost")
-    return quantity * unitCost
-  }, [form.watch("quantity"), form.watch("unitCost")])
+    return quantity * unitCost;
+  }, [quantity, unitCost]);
 
   async function onSubmit(data: StockAdjustmentFormValues) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log(data)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(data);
       toast({
-        title: "Success",
-        description: "Stock adjustment has been saved.",
-      })
-      form.reset()
+        title: 'Success',
+        description: 'Stock adjustment has been saved.'
+      });
+      form.reset();
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to save stock adjustment.",
-      })
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to save stock adjustment.'
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   const handleDelete = async () => {
     if (selectedItems.length === 0) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Please select items to delete.",
-      })
-      return
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Please select items to delete.'
+      });
+      return;
     }
 
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       toast({
-        title: "Success",
-        description: `${selectedItems.length} items have been deleted.`,
-      })
-      setSelectedItems([])
+        title: 'Success',
+        description: `${selectedItems.length} items have been deleted.`
+      });
+      setSelectedItems([]);
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to delete items.",
-      })
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to delete items.'
+      });
     }
-  }
+  };
 
   return (
     <Card>
@@ -174,7 +176,7 @@ export function StockAdjustmentForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="transactionType"
@@ -211,14 +213,14 @@ export function StockAdjustmentForm() {
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            variant={"outline"}
+                            variant={'outline'}
                             className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              'w-full pl-3 text-left font-normal',
+                              !field.value && 'text-muted-foreground'
                             )}
                           >
                             {field.value ? (
-                              format(field.value, "dd MMM yyyy")
+                              format(field.value, 'dd MMM yyyy')
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -241,7 +243,8 @@ export function StockAdjustmentForm() {
               />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            {/* Stock Code and Quantity */}
+            <div className="grid gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="stockCode"
@@ -261,22 +264,30 @@ export function StockAdjustmentForm() {
                         <PopoverContent className="w-[300px] p-0">
                           <Command>
                             <CommandInput placeholder="Search stock..." />
-                            <CommandEmpty>No stock found.</CommandEmpty>
-                            <CommandGroup>
-                              {stockItems.map((item) => (
-                                <CommandItem
-                                  key={item.stockCode}
-                                  value={item.stockCode}
-                                  onSelect={(value) => {
-                                    form.setValue("stockCode", value)
-                                    form.setValue("description", item.description)
-                                    form.setValue("unitCost", item.totalCost / item.quantityOnHand)
-                                  }}
-                                >
-                                  {item.stockCode} - {item.description}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            <CommandList>
+                              <CommandEmpty>No stock found.</CommandEmpty>
+                              <CommandGroup>
+                                {stockItems.map((item) => (
+                                  <CommandItem
+                                    key={item.stockCode}
+                                    value={item.stockCode}
+                                    onSelect={(value) => {
+                                      form.setValue('stockCode', value);
+                                      form.setValue(
+                                        'description',
+                                        item.description
+                                      );
+                                      form.setValue(
+                                        'unitCost',
+                                        item.totalCost / item.quantityOnHand
+                                      );
+                                    }}
+                                  >
+                                    {item.stockCode} - {item.description}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
                           </Command>
                         </PopoverContent>
                       </Popover>
@@ -305,12 +316,13 @@ export function StockAdjustmentForm() {
               />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            {/* Description and Unit Cost */}
+            <div className="grid gap-4 sm:grid-cols-3">
               <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
-                  <FormItem className="md:col-span-2">
+                  <FormItem className="sm:col-span-2">
                     <FormLabel>Description:</FormLabel>
                     <FormControl>
                       <Input {...field} readOnly />
@@ -345,7 +357,8 @@ export function StockAdjustmentForm() {
               </span>
             </div>
 
-            <div className="rounded-md border">
+            {/* Table with horizontal scroll on mobile */}
+            <div className="overflow-x-auto rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -356,16 +369,20 @@ export function StockAdjustmentForm() {
                         checked={selectedItems.length === stockItems.length}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setSelectedItems(stockItems.map(item => item.stockCode))
+                            setSelectedItems(
+                              stockItems.map((item) => item.stockCode)
+                            );
                           } else {
-                            setSelectedItems([])
+                            setSelectedItems([]);
                           }
                         }}
                       />
                     </TableHead>
                     <TableHead>Stock Code</TableHead>
                     <TableHead>Description</TableHead>
-                    <TableHead className="text-right">Quantity On Hand</TableHead>
+                    <TableHead className="text-right">
+                      Quantity On Hand
+                    </TableHead>
                     <TableHead className="text-right">Total Cost</TableHead>
                     <TableHead>Date</TableHead>
                   </TableRow>
@@ -380,25 +397,38 @@ export function StockAdjustmentForm() {
                           checked={selectedItems.includes(item.stockCode)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setSelectedItems([...selectedItems, item.stockCode])
+                              setSelectedItems([
+                                ...selectedItems,
+                                item.stockCode
+                              ]);
                             } else {
-                              setSelectedItems(selectedItems.filter(code => code !== item.stockCode))
+                              setSelectedItems(
+                                selectedItems.filter(
+                                  (code) => code !== item.stockCode
+                                )
+                              );
                             }
                           }}
                         />
                       </TableCell>
                       <TableCell>{item.stockCode}</TableCell>
                       <TableCell>{item.description}</TableCell>
-                      <TableCell className="text-right">{item.quantityOnHand}</TableCell>
-                      <TableCell className="text-right">{item.totalCost.toFixed(2)}</TableCell>
-                      <TableCell>{format(new Date(item.date), "dd MMM yyyy")}</TableCell>
+                      <TableCell className="text-right">
+                        {item.quantityOnHand}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item.totalCost.toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(item.date), 'dd MMM yyyy')}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
+          <CardFooter className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-between">
             <Button
               type="button"
               variant="destructive"
@@ -407,16 +437,23 @@ export function StockAdjustmentForm() {
             >
               Delete
             </Button>
-            <div className="flex gap-2">
+            <div className="flex w-full gap-2 sm:w-auto">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => form.reset()}
+                className="flex-1 sm:flex-none"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 sm:flex-none"
+              >
+                {isSubmitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Save
               </Button>
             </div>
@@ -424,6 +461,5 @@ export function StockAdjustmentForm() {
         </form>
       </Form>
     </Card>
-  )
+  );
 }
-

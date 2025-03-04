@@ -1,48 +1,48 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { format } from "date-fns"
-import { CalendarIcon, Loader2, Plus, Search, Trash2 } from 'lucide-react'
-import { useFieldArray, useForm } from "react-hook-form"
-import { useEnterNavigation } from "@/hooks/use-enter-navigation"
+import * as React from 'react';
+import { format } from 'date-fns';
+import { CalendarIcon, Loader2, Plus, Search, Trash2 } from 'lucide-react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useEnterNavigation } from '@/hooks/use-enter-navigation';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  CardTitle
+} from '@/components/ui/card';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+  CommandList
+} from '@/components/ui/command';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { useToast } from "@/components/ui/use-toast"
-import { Textarea } from "@/components/ui/textarea"
-import type { InventoryItem, PurchaseRequisition } from "@/types"
+  PopoverTrigger
+} from '@/components/ui/popover';
+import { useToast } from '@/components/ui/use-toast';
+import { Textarea } from '@/components/ui/textarea';
+import type { InventoryItem, PurchaseRequisition } from '@/types';
 // Import CompanySelector component
-import { CompanySelector } from "@/components/company-selector"; // Adjust path as needed
-
+import { CompanySelector } from '@/components/company-selector'; // Adjust path as needed
 
 // Mock inventory data - replace with API call
 const inventoryItems: InventoryItem[] = [
@@ -88,79 +88,85 @@ const inventoryItems: InventoryItem[] = [
 ];
 
 export function PurchaseRequisitionForm() {
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const formRef = React.useRef<HTMLFormElement>(null)
-  
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const formRef = React.useRef<HTMLFormElement>(null);
+
   // Initialize the Enter key navigation
-  useEnterNavigation(formRef)
+  useEnterNavigation(formRef);
 
   const form = useForm<PurchaseRequisition>({
     defaultValues: {
-      company: "",
-      date: format(new Date(), "yyyy-MM-dd"),
+      company: '',
+      date: format(new Date(), 'yyyy-MM-dd'),
       items: [
         {
-          id: "1",
-          stockCode: "",
-          description: "",
+          id: '1',
+          stockCode: '',
+          description: '',
           quantity: 0,
-          uom: "",
+          uom: '',
           unitPrice: 0,
           discount: 0,
           subAmount: 0,
-          taxCode: "",
+          taxCode: '',
           taxRate: 0,
-          station: "",
+          station: '',
           totalAmount: 0
         }
       ]
     }
-  })
+  });
 
   const { fields, append, remove } = useFieldArray({
-    name: "items",
+    name: 'items',
     control: form.control
-  })
+  });
 
   async function onSubmit(data: PurchaseRequisition) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log(data)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log(data);
       toast({
-        title: "Success",
-        description: "Purchase requisition has been submitted.",
-      })
-      form.reset()
+        title: 'Success',
+        description: 'Purchase requisition has been submitted.'
+      });
+      form.reset();
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to submit purchase requisition.",
-      })
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to submit purchase requisition.'
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
-  const calculateTotals = React.useCallback((items: PurchaseRequisition["items"]) => {
-    const subTotal = items.reduce((acc, item) => acc + item.subAmount, 0)
-    const taxAmount = items.reduce((acc, item) => acc + (item.subAmount * item.taxRate), 0)
-    return {
-      subTotal,
-      taxAmount,
-      total: subTotal + taxAmount
-    }
-  }, [])
+  const calculateTotals = React.useCallback(
+    (items: PurchaseRequisition['items']) => {
+      const subTotal = items.reduce((acc, item) => acc + item.subAmount, 0);
+      const taxAmount = items.reduce(
+        (acc, item) => acc + item.subAmount * item.taxRate,
+        0
+      );
+      return {
+        subTotal,
+        taxAmount,
+        total: subTotal + taxAmount
+      };
+    },
+    []
+  );
 
   return (
     <Form {...form}>
       <form
         ref={formRef}
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6"
+        className="space-y-4"
       >
         <Card>
           <CardHeader>
@@ -329,32 +335,34 @@ export function PurchaseRequisitionForm() {
                         <PopoverContent className="w-[300px] p-0">
                           <Command>
                             <CommandInput placeholder="Search stock..." />
-                            <CommandEmpty>No stock found.</CommandEmpty>
-                            <CommandGroup>
-                              {inventoryItems.map((item) => (
-                                <CommandItem
-                                  key={item.stockCode}
-                                  value={item.stockCode}
-                                  onSelect={() => {
-                                    itemField.onChange(item.stockCode);
-                                    form.setValue(
-                                      `items.${index}.description`,
-                                      item.description
-                                    );
-                                    form.setValue(
-                                      `items.${index}.uom`,
-                                      item.uomCode
-                                    );
-                                    form.setValue(
-                                      `items.${index}.unitPrice`,
-                                      item.lastPrice
-                                    );
-                                  }}
-                                >
-                                  {item.stockCode} - {item.description}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
+                            <CommandList>
+                              <CommandEmpty>No stock found.</CommandEmpty>
+                              <CommandGroup>
+                                {inventoryItems.map((item) => (
+                                  <CommandItem
+                                    key={item.stockCode}
+                                    value={item.stockCode}
+                                    onSelect={() => {
+                                      itemField.onChange(item.stockCode);
+                                      form.setValue(
+                                        `items.${index}.description`,
+                                        item.description
+                                      );
+                                      form.setValue(
+                                        `items.${index}.uom`,
+                                        item.uomCode
+                                      );
+                                      form.setValue(
+                                        `items.${index}.unitPrice`,
+                                        item.lastPrice
+                                      );
+                                    }}
+                                  >
+                                    {item.stockCode} - {item.description}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
                           </Command>
                         </PopoverContent>
                       </Popover>
@@ -502,7 +510,7 @@ export function PurchaseRequisitionForm() {
           <CardHeader>
             <CardTitle>Additional Information</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <FormField
               control={form.control}
               name="remarks"
@@ -533,4 +541,3 @@ export function PurchaseRequisitionForm() {
     </Form>
   );
 }
-

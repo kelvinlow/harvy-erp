@@ -32,20 +32,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} ${Roboto.variable}`}>
         <SidebarProvider defaultOpen>
-          <div className="relative flex min-h-screen flex-col">
-            <TopNav />
-            <div className="flex flex-1 pt-16">
-              {' '}
-              {/* Add pt-16 to create space for the fixed top nav */}
-              <AppSidebar />
-              <SidebarInset>
-                <main className="flex-1 overflow-y-auto">
-                  <div className="container mx-auto px-4 py-6 md:px-6">
-                    {children}
-                  </div>
-                </main>
-              </SidebarInset>
-            </div>
+          <TopNav />
+          <div className="flex pt-16">
+            <AppSidebar />
+            <SidebarInset>
+              <main className="w-full">
+                <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 lg:px-8">
+                  {children}
+                </div>
+              </main>
+            </SidebarInset>
           </div>
         </SidebarProvider>
       </body>
