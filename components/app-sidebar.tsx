@@ -1,13 +1,22 @@
 'use client';
+
 import { usePathname } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Box,
-  LayoutDashboard,
-  Package,
-  ShoppingCart,
-  Store,
-  Truck
-} from 'lucide-react';
+  faGrip,
+  faTruck,
+  faCubes,
+  faBox,
+  faClipboardList,
+  faBoxArchive,
+  faBook,
+  faRightLeft,
+  faCartShopping,
+  faFileInvoice,
+  faFileLines,
+  faFileImport,
+  faStore
+} from '@fortawesome/free-solid-svg-icons';
 
 import {
   Sidebar,
@@ -28,63 +37,81 @@ const navigation = [
   {
     title: 'Dashboard',
     href: '/dashboard',
-    icon: LayoutDashboard
+    icon: faGrip
   },
   {
     title: 'Delivery Orders',
     href: '/delivery-orders',
-    icon: Truck
+    icon: faTruck
   },
   {
     title: 'Inventory',
     href: '/inventory',
-    icon: Package,
+    icon: faCubes,
     items: [
       {
         title: 'Stock Issue',
-        href: '/inventory/stock-issue'
+        href: '/inventory/stock-issue',
+        icon: faBox
       },
       {
         title: 'Daily Transaction',
-        href: '/inventory/daily-transaction'
+        href: '/inventory/daily-transaction',
+        icon: faClipboardList
       },
       {
         title: 'Stock Adjustment',
-        href: '/inventory/stock-adjustment'
+        href: '/inventory/stock-adjustment',
+        icon: faBoxArchive
       },
       {
         title: 'Stock Ledger',
-        href: '/inventory/stock-ledger'
+        href: '/inventory/stock-ledger',
+        icon: faBook
       },
       {
         title: 'Internal Transfer',
-        href: '/inventory/internal-transfer'
+        href: '/inventory/internal-transfer',
+        icon: faRightLeft
+      },
+      {
+        title: 'UOM',
+        href: '/inventory/uom',
+        icon: faBook
+      },
+      {
+        title: 'Machine',
+        href: '/inventory/machine',
+        icon: faBook
       }
     ]
   },
   {
     title: 'Purchase',
     href: '/purchase-order',
-    icon: ShoppingCart,
+    icon: faCartShopping,
     items: [
       {
         title: 'Purchase Order',
-        href: '/purchase-order'
+        href: '/purchase-order',
+        icon: faFileInvoice
       },
       {
         title: 'Purchase Requisition',
-        href: '/purchase-requisition'
+        href: '/purchase-requisition',
+        icon: faFileLines
       },
       {
         title: 'Internal Purchase Requisition',
-        href: '/internal-purchase-requisition'
+        href: '/internal-purchase-requisition',
+        icon: faFileImport
       }
     ]
   },
   {
     title: 'Store Issues',
     href: '/reports/store-issues',
-    icon: Store
+    icon: faStore
   }
 ];
 
@@ -93,16 +120,17 @@ export function AppSidebar() {
 
   return (
     <Sidebar
-      className="top-16 bg-gradient-to-br from-sky-50 via-indigo-50"
+      className="border-r bg-gradient-to-br from-sky-50 via-indigo-50 to-white" // Remove top-0 and padding classes
+      collapsible="icon"
+      variant="floating"
     >
-      {' '}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="/">
+              <a href="/" className="flex items-center gap-2">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Box className="size-4" />
+                  <FontAwesomeIcon icon={faGrip} className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">HARVY-ERP</span>
@@ -122,9 +150,13 @@ export function AppSidebar() {
                   asChild
                   isActive={pathname === item.href}
                   tooltip={item.title}
+                  className="whitespace-normal break-words"
                 >
                   <a href={item.href}>
-                    <item.icon className="size-4" />
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="size-4 shrink-0"
+                    />
                     <span>{item.title}</span>
                   </a>
                 </SidebarMenuButton>
@@ -135,8 +167,15 @@ export function AppSidebar() {
                         <SidebarMenuSubButton
                           asChild
                           isActive={pathname === subItem.href}
+                          className="whitespace-normal break-words py-2 leading-tight"
                         >
-                          <a href={subItem.href}>{subItem.title}</a>
+                          <a href={subItem.href} className="flex items-start">
+                            <FontAwesomeIcon
+                              icon={subItem.icon}
+                              className="size-3.5 shrink-0 mr-2 mt-0.5"
+                            />
+                            <span>{subItem.title}</span>
+                          </a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
