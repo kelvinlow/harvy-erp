@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileText, Package, CheckSquare, FileSpreadsheet, ArrowUp, ArrowDown } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileText, ArrowUp } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
@@ -7,7 +7,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Homepage</h1>
       </div>
-      
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -27,6 +27,5 @@ export default function DashboardPage() {
         {/* Repeat other cards... */}
       </div>
     </div>
-  )
+  );
 }
-

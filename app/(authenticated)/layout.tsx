@@ -42,7 +42,7 @@ export default function AuthenticatedLayout({
               {' '}
               {/* Add pt-16 for top nav spacing */}
               <AppSidebar />
-              <main className="relative flex-1 overflow-y-auto bg-background px-4 py-6 md:px-6">
+              <main className="relative overflow-y-auto bg-background">
                 {children}
               </main>
             </div>
