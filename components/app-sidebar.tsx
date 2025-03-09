@@ -1,5 +1,7 @@
 'use client';
 
+import type React from 'react';
+
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
@@ -154,14 +156,20 @@ export function AppSidebar() {
       {/* Sidebar wrapper with higher z-index */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex w-72 transform flex-col transition-transform duration-300 ease-in-out md:sticky md:translate-x-0',
+          'fixed inset-y-0 left-0 z-30 flex w-72 transform flex-col shadow-lg transition-transform duration-300 ease-in-out md:sticky md:translate-x-0 md:shadow-none md:w-80',
           openMobile ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         <Sidebar
-          className="h-full border-r bg-background/95 backdrop-blur-sm"
+          className="h-full border-r bg-background backdrop-blur-none"
           collapsible="icon"
           variant="floating"
+          style={
+            {
+              '--sidebar-width': '20rem',
+              '--sidebar-width-icon': '3.5rem'
+            } as React.CSSProperties
+          }
         >
           <SidebarHeader className="bg-gradient-to-br from-sky-50 to-emerald-80">
             <SidebarMenu>
@@ -172,9 +180,9 @@ export function AppSidebar() {
                       <FontAwesomeIcon icon={faGrip} className="size-4" />
                     </div>
                     <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-semibold">HARVY-ERP</span>
+                      <span className="font-semibold">HARVY DIGITAL CLOUD</span>
                       <span className="text-xs text-muted-foreground">
-                        v1.0.0
+                        v0.0.1-prototype
                       </span>
                     </div>
                   </a>
@@ -192,14 +200,26 @@ export function AppSidebar() {
                       asChild
                       isActive={pathname === item.href}
                       tooltip={item.title}
-                      className="whitespace-normal break-words"
+                      className={cn(
+                        'whitespace-normal break-words',
+                        pathname === item.href && 'bg-primary/10 font-medium'
+                      )}
                     >
                       <a href={item.href}>
                         <FontAwesomeIcon
                           icon={item.icon}
-                          className="size-4 shrink-0"
+                          className={cn(
+                            'size-4 shrink-0',
+                            pathname === item.href && 'text-primary'
+                          )}
                         />
-                        <span>{item.title}</span>
+                        <span>
+                          {pathname === item.href ? (
+                            <span className="font-medium">{item.title}</span>
+                          ) : (
+                            item.title
+                          )}
+                        </span>
                       </a>
                     </SidebarMenuButton>
                     {item.items?.length ? (
@@ -209,7 +229,11 @@ export function AppSidebar() {
                             <SidebarMenuSubButton
                               asChild
                               isActive={pathname === subItem.href}
-                              className="whitespace-normal break-words py-2 leading-tight"
+                              className={cn(
+                                'whitespace-normal break-words py-2 leading-tight',
+                                pathname === subItem.href &&
+                                  'bg-primary/10 font-medium'
+                              )}
                             >
                               <a
                                 href={subItem.href}
@@ -217,9 +241,20 @@ export function AppSidebar() {
                               >
                                 <FontAwesomeIcon
                                   icon={subItem.icon}
-                                  className="size-3.5 shrink-0 mr-2 mt-0.5"
+                                  className={cn(
+                                    'size-3.5 shrink-0 mr-2 mt-0.5',
+                                    pathname === subItem.href && 'text-primary'
+                                  )}
                                 />
-                                <span>{subItem.title}</span>
+                                <span>
+                                  {pathname === subItem.href ? (
+                                    <span className="font-medium">
+                                      {subItem.title}
+                                    </span>
+                                  ) : (
+                                    subItem.title
+                                  )}
+                                </span>
                               </a>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>

@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'HARVY-ERP',
+  title: 'HARVY DIGITAL CLOUD',
   description: 'Enterprise Resource Planning System'
 };
 
