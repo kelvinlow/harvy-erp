@@ -191,29 +191,34 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarHeader>
 
-          <SidebarContent className="bg-gradient-to-br from-sky-50 to-emerald-80">
+          <SidebarContent className="bg-gradient-to-br from-sky-50/80 via-white/80 to-emerald-50/80">
             <SidebarGroup>
               <SidebarMenu>
                 {navigation.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.title} className="group">
                     <SidebarMenuButton
                       asChild
                       isActive={pathname === item.href}
                       tooltip={item.title}
                       className={cn(
-                        'whitespace-normal break-words',
-                        pathname === item.href && 'bg-primary/10 font-medium'
+                        'relative whitespace-normal break-words transition-all duration-200 ease-in-out',
+                        'before:absolute before:inset-0 before:z-0 before:rounded-sm before:opacity-0 before:transition-opacity before:duration-200',
+                        'hover:before:opacity-100 before:bg-primary/5',
+                        pathname === item.href &&
+                          'border-primary pl-3 bg-primary/10 font-medium'
                       )}
                     >
-                      <a href={item.href}>
+                      <a href={item.href} className="group/link relative z-10">
                         <FontAwesomeIcon
                           icon={item.icon}
                           className={cn(
-                            'size-4 shrink-0',
-                            pathname === item.href && 'text-primary'
+                            'size-4 shrink-0 transition-colors duration-200',
+                            pathname === item.href
+                              ? 'text-primary'
+                              : 'group-hover/link:text-primary'
                           )}
                         />
-                        <span>
+                        <span className="relative">
                           {pathname === item.href ? (
                             <span className="font-medium">{item.title}</span>
                           ) : (
@@ -225,28 +230,35 @@ export function AppSidebar() {
                     {item.items?.length ? (
                       <SidebarMenuSub>
                         {item.items.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubItem
+                            key={subItem.title}
+                            className="group"
+                          >
                             <SidebarMenuSubButton
                               asChild
                               isActive={pathname === subItem.href}
                               className={cn(
-                                'whitespace-normal break-words py-2 leading-tight',
+                                'relative whitespace-normal break-words py-2 leading-tight transition-all duration-200 ease-in-out',
+                                'before:absolute before:inset-0 before:z-0 before:rounded-sm before:opacity-0 before:transition-opacity before:duration-200',
+                                'hover:before:opacity-100 before:bg-primary/5',
                                 pathname === subItem.href &&
-                                  'bg-primary/10 font-medium'
+                                  'border-primary pl-3 bg-primary/10 font-medium'
                               )}
                             >
                               <a
                                 href={subItem.href}
-                                className="flex items-start"
+                                className="flex items-start group/link relative z-10"
                               >
                                 <FontAwesomeIcon
                                   icon={subItem.icon}
                                   className={cn(
-                                    'size-3.5 shrink-0 mr-2 mt-0.5',
-                                    pathname === subItem.href && 'text-primary'
+                                    'size-3.5 shrink-0 mr-2 mt-0.5 transition-colors duration-200',
+                                    pathname === subItem.href
+                                      ? 'text-primary'
+                                      : 'group-hover/link:text-primary'
                                   )}
                                 />
-                                <span>
+                                <span className="relative">
                                   {pathname === subItem.href ? (
                                     <span className="font-medium">
                                       {subItem.title}
