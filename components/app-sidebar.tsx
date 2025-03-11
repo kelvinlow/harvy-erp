@@ -1,10 +1,9 @@
 'use client';
 
 import type React from 'react';
-
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { useEffect, useState, useMemo } from 'react';
+import { Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGrip,
@@ -125,6 +124,23 @@ const navigation = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { openMobile, setOpenMobile } = useSidebar();
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  // Calculate total menu items including subitems
+  const totalMenuItems = useMemo(() => {
+    return navigation.reduce((total, item) => {
+      return total + 1 + (item.items?.length || 0);
+    }, 0);
+  }, []);
+
+  // Calculate dynamic width based on menu items
+  const sidebarWidth = useMemo(() => {
+    const baseWidth = 16; // 16rem = 256px
+    const itemWidth = 0.5; // 0.5rem = 8px per item
+    const maxWidth = 24; // 24rem = 384px
+    const calculatedWidth = baseWidth + totalMenuItems * itemWidth;
+    return Math.min(calculatedWidth, maxWidth);
+  }, [totalMenuItems]);
 
   // Close sidebar when route changes on mobile
   useEffect(() => {
@@ -136,15 +152,12 @@ export function AppSidebar() {
 
     handleRouteChange();
     window.addEventListener('resize', handleRouteChange);
-
-    return () => {
-      window.removeEventListener('resize', handleRouteChange);
-    };
+    return () => window.removeEventListener('resize', handleRouteChange);
   }, [pathname, setOpenMobile]);
 
   return (
     <>
-      {/* Semi-transparent overlay with lower z-index */}
+      {/* Overlay */}
       {openMobile && (
         <div
           className="fixed inset-0 z-20 bg-black/20 backdrop-blur-[2px] transition-opacity duration-300 ease-in-out md:hidden"
@@ -153,45 +166,61 @@ export function AppSidebar() {
         />
       )}
 
-      {/* Sidebar wrapper with higher z-index */}
+      {/* Sidebar wrapper */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex w-72 transform flex-col shadow-lg transition-transform duration-300 ease-in-out md:sticky md:translate-x-0 md:shadow-none md:w-80',
-          openMobile ? 'translate-x-0' : '-translate-x-full'
+          'fixed inset-y-0 left-0 z-30 flex transform flex-col shadow-lg transition-all duration-300 ease-in-out md:sticky',
+          'md:transition-[width,transform] md:duration-300',
+          openMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+          isExpanded ? `w-[${sidebarWidth}rem]` : 'w-16'
         )}
+        style={
+          {
+            '--sidebar-width': `${sidebarWidth}rem`,
+            '--sidebar-width-collapsed': '4rem'
+          } as React.CSSProperties
+        }
       >
         <Sidebar
-          className="h-full border-r bg-background backdrop-blur-none"
+          className={cn(
+            'h-full border-r bg-background backdrop-blur-none',
+            'transition-[width,padding] duration-300 ease-in-out'
+          )}
           collapsible="icon"
           variant="floating"
-          style={
-            {
-              '--sidebar-width': '20rem',
-              '--sidebar-width-icon': '3.5rem'
-            } as React.CSSProperties
-          }
         >
           <SidebarHeader className="bg-gradient-to-br from-sky-50 to-emerald-80">
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton size="lg" asChild>
-                  <a href="/" className="flex items-center gap-2">
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                      <FontAwesomeIcon icon={faGrip} className="size-4" />
-                    </div>
-                    <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-semibold">HARVY DIGITAL CLOUD</span>
-                      <span className="text-xs text-muted-foreground">
-                        v0.0.1-prototype
-                      </span>
-                    </div>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
+            <div className="flex items-center justify-between px-4 py-2">
+              {isExpanded && (
+                <a href="/" className="flex items-center gap-2">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <FontAwesomeIcon icon={faGrip} className="size-4" />
+                  </div>
+                  <div className="flex flex-col gap-0.5 leading-none">
+                    <span className="font-semibold">HARVY DIGITAL CLOUD</span>
+                    <span className="text-xs text-muted-foreground">
+                      v0.0.1-prototype
+                    </span>
+                  </div>
+                </a>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="ml-auto"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? <ChevronLeft /> : <ChevronRight />}
+              </Button>
+            </div>
           </SidebarHeader>
 
-          <SidebarContent className="bg-gradient-to-br from-sky-50/80 via-white/80 to-emerald-50/80">
+          <SidebarContent
+            className={cn(
+              'bg-gradient-to-br from-sky-50/80 via-white/80 to-emerald-50/80',
+              'transition-[width,padding] duration-300 ease-in-out'
+            )}
+          >
             <SidebarGroup>
               <SidebarMenu>
                 {navigation.map((item) => (
@@ -199,7 +228,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={pathname === item.href}
-                      tooltip={item.title}
+                      tooltip={!isExpanded ? item.title : undefined}
                       className={cn(
                         'relative whitespace-normal break-words transition-all duration-200 ease-in-out',
                         'before:absolute before:inset-0 before:z-0 before:rounded-sm before:opacity-0 before:transition-opacity before:duration-200',
@@ -208,7 +237,10 @@ export function AppSidebar() {
                           'border-primary pl-3 bg-primary/10 font-medium'
                       )}
                     >
-                      <a href={item.href} className="group/link relative z-10">
+                      <a
+                        href={item.href}
+                        className="group/link relative z-10 flex items-center gap-2"
+                      >
                         <FontAwesomeIcon
                           icon={item.icon}
                           className={cn(
@@ -218,16 +250,15 @@ export function AppSidebar() {
                               : 'group-hover/link:text-primary'
                           )}
                         />
-                        <span className="relative">
-                          {pathname === item.href ? (
-                            <span className="font-medium">{item.title}</span>
-                          ) : (
-                            item.title
-                          )}
-                        </span>
+                        {isExpanded && (
+                          <span className="transition-opacity duration-200">
+                            {item.title}
+                          </span>
+                        )}
                       </a>
                     </SidebarMenuButton>
-                    {item.items?.length ? (
+
+                    {isExpanded && item.items?.length && (
                       <SidebarMenuSub>
                         {item.items.map((subItem) => (
                           <SidebarMenuSubItem
@@ -258,21 +289,13 @@ export function AppSidebar() {
                                       : 'group-hover/link:text-primary'
                                   )}
                                 />
-                                <span className="relative">
-                                  {pathname === subItem.href ? (
-                                    <span className="font-medium">
-                                      {subItem.title}
-                                    </span>
-                                  ) : (
-                                    subItem.title
-                                  )}
-                                </span>
+                                <span>{subItem.title}</span>
                               </a>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>
-                    ) : null}
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -282,7 +305,7 @@ export function AppSidebar() {
         </Sidebar>
       </div>
 
-      {/* Toggle button with highest z-index */}
+      {/* Mobile toggle button */}
       <Button
         variant="outline"
         size="icon"
