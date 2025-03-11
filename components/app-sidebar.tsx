@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Menu, X } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -34,7 +34,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-  SidebarTrigger,
   useSidebar
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
@@ -126,47 +125,83 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { openMobile, setOpenMobile } = useSidebar();
 
-  // Close sidebar when route changes on mobile
+  // Calculate total menu items including subitems
+  const totalMenuItems = useMemo(() => {
+    return navigation.reduce((total, item) => {
+      return total + 1 + (item.items?.length || 0);
+    }, 0);
+  }, []);
+
+  // Calculate dynamic width based on menu items
+  const sidebarWidth = useMemo(() => {
+    const baseWidth = 16; // 16rem = 256px
+    const itemWidth = 0.5; // 0.5rem = 8px per item
+    const maxWidth = 20; // 24rem = 384px
+    const calculatedWidth = baseWidth + totalMenuItems * itemWidth;
+    return Math.min(calculatedWidth, maxWidth);
+  }, [totalMenuItems]);
+
+  // Handle mobile sidebar and resize events
   useEffect(() => {
-    const handleRouteChange = () => {
-      if (window.innerWidth < 768) {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      if (!isMobile && openMobile) {
         setOpenMobile(false);
       }
     };
 
-    handleRouteChange();
-    window.addEventListener('resize', handleRouteChange);
-    return () => window.removeEventListener('resize', handleRouteChange);
-  }, [pathname, setOpenMobile]);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [openMobile, setOpenMobile]);
 
   return (
     <>
-      {/* Overlay */}
-      { openMobile && (
+      {/* Mobile overlay with improved backdrop filter */}
+      {openMobile && (
         <div
-          className="fixed inset-0 z-20 bg-black/20 backdrop-blur-[2px] transition-opacity duration-300 ease-in-out md:hidden"
+          className={cn(
+            'fixed inset-0 z-40 bg-background/80 backdrop-blur-sm',
+            'transition-opacity duration-300 ease-in-out md:hidden'
+          )}
           onClick={() => setOpenMobile(false)}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar wrapper */}
+      {/* Unified sidebar wrapper for both mobile and desktop */}
       <div
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex w-72 transform flex-col shadow-lg transition-transform duration-300 ease-in-out md:sticky md:translate-x-0 md:shadow-none md:w-80',
-          openMobile ? 'translate-x-0' : '-translate-x-full'
+          'fixed inset-y-0 left-0 z-30 flex transform flex-col shadow-lg transition-all duration-300 ease-in-out md:sticky',
+          'md:transition-[width,transform] md:duration-300',
+          openMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+          `w-[${sidebarWidth}rem]`
         )}
+        style={
+          {
+            '--sidebar-width': `${sidebarWidth}rem`,
+            '--sidebar-width-collapsed': '4rem'
+          } as React.CSSProperties
+        }
       >
         <Sidebar
-          className="h-full border-r bg-background backdrop-blur-none"
+          className={cn(
+            'h-full border-r bg-background/95 backdrop-blur-md',
+            'transition-[width,padding] duration-300 ease-in-out'
+          )}
           collapsible="icon"
           variant="floating"
         >
-          <SidebarHeader className="bg-gradient-to-br from-sky-50 to-emerald-80">
+          <SidebarHeader
+            className={cn(
+              'bg-gradient-to-br from-sky-50 via-indigo-50 to-emerald-50',
+              'border-b border-border/50 backdrop-blur-sm'
+            )}
+          >
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild>
-                  <a href="/" className="flex items-center gap-2">
+                  <a href="/dashboard" className="flex items-center gap-2">
                     <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                       <FontAwesomeIcon icon={faGrip} className="size-4" />
                     </div>
@@ -181,10 +216,9 @@ export function AppSidebar() {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarHeader>
-
           <SidebarContent
             className={cn(
-              'bg-gradient-to-br from-sky-50/80 via-white/80 to-emerald-50/80',
+              'bg-gradient-to-br from-sky-50 via-indigo-50 to-emerald-50',
               'transition-[width,padding] duration-300 ease-in-out'
             )}
           >
@@ -195,13 +229,14 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={pathname === item.href}
-                      tooltip={item.title}
+                      tooltip={!openMobile ? item.title : undefined}
                       className={cn(
-                        'relative whitespace-normal break-words transition-all duration-200 ease-in-out',
-                        'before:absolute before:inset-0 before:z-0 before:rounded-sm before:opacity-0 before:transition-opacity before:duration-200',
-                        'hover:before:opacity-100 before:bg-primary/5',
+                        'relative flex items-center gap-3 rounded-md px-3 py-2',
+                        'transition-all duration-200 ease-in-out active:scale-[0.98]',
+                        'hover:bg-accent/50 active:bg-accent',
                         pathname === item.href &&
-                          'border-primary pl-3 bg-primary/10 font-medium'
+                          'bg-accent font-medium text-accent-foreground',
+                        'touch-manipulation md:touch-auto' // Better touch handling
                       )}
                     >
                       <a
@@ -226,7 +261,8 @@ export function AppSidebar() {
                         </span>
                       </a>
                     </SidebarMenuButton>
-                    {item.items?.length ? (
+
+                    {item.items?.length && (
                       <SidebarMenuSub>
                         {item.items.map((subItem) => (
                           <SidebarMenuSubItem
@@ -263,13 +299,14 @@ export function AppSidebar() {
                           </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>
-                    ): null}
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
             </SidebarGroup>
           </SidebarContent>
-          <SidebarRail />
+
+          <SidebarRail className="hidden md:block" />
         </Sidebar>
       </div>
 
@@ -277,7 +314,12 @@ export function AppSidebar() {
       <Button
         variant="outline"
         size="icon"
-        className="fixed left-4 top-4 z-40 md:hidden"
+        className={cn(
+          'fixed left-4 top-4 z-50 md:hidden',
+          'bg-background/95 backdrop-blur-md',
+          'transition-transform duration-300',
+          openMobile && 'translate-x-[calc(min(20rem,85vw)-1rem)]'
+        )}
         onClick={() => setOpenMobile(!openMobile)}
         aria-label={openMobile ? 'Close sidebar' : 'Open sidebar'}
       >
